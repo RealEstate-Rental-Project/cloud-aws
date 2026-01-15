@@ -91,6 +91,28 @@ These services run as pods within the EKS cluster, leveraging the high-memory no
     aws eks update-kubeconfig --region eu-north-1 --name estate-rental-cluster
     ```
 
+5.  **Install AWS Load Balancer Controller**
+
+    The AWS Load Balancer Controller is essential for provisioning Application Load Balancers (ALB) that expose your Kubernetes Ingress resources to the internet.
+
+    ```bash
+    # 1. Add the EKS charts repository
+    helm repo add eks https://aws.github.io/eks-charts
+    helm repo update
+
+    # 2. Retrieve your VPC ID (from Terraform output)
+    export VPC_ID=$(terraform output -raw vpc_id)
+
+    # 3. Install the controller via Helm
+    helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+      -n kube-system \
+      --set clusterName=estate-rental-cluster \
+      --set serviceAccount.create=false \
+      --set serviceAccount.name=aws-load-balancer-controller \
+      --set region=eu-north-1 \
+      --set vpcId=$VPC_ID
+    ```
+
 ## 📤 Outputs
 
 After a successful deployment, Terraform will output the following critical information:

@@ -14,5 +14,5 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-north-1" # Assure-toi que cette ligne est bien présente
+  region = "eu-west-1" # Assure-toi que cette ligne est bien présente
 }
